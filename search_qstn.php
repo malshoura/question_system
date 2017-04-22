@@ -92,9 +92,10 @@
 
                 <!-- /. ROW  -->
                 <div class="row">
+                    <form role="form" method="post" action="">
             <div class="col-md-6">
 
-                            <form role="form" method="post" action="">
+
                                         <div class="form-group">
                                             <label> search </label>
                                             <input class="form-control" type="text" name="question">
@@ -126,13 +127,75 @@
                                         </div>
 
                                  <aside align="right">
-                                        <button type="submit" class="btn btn-info" align="center" name="ask">search</button></aside>
+                                        <button type="submit" class="btn btn-info" align="center" name="search">search</button></aside>
 
                                     </form>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="container">
+                    <?php
+                    include "DataBase.php";
+                    $db=new DataBase('qstn');
+                    if(isset($_POST['search'])) {
 
+
+                        $res = $db->read(['spclty_id'], [$_POST['specialization']], " and `qstn_txt` LIKE '%{$_POST['question']}%'");
+                        //echo var_dump($res);
+                        if (sizeof($res) == 0) {
+                            echo
+                            "<h1 style=color:red>no result found</h1>";
+                        } else {
+                            echo
+                            "<h1 style=color:green>your search results</h1>";
+                            for ($i = 0; $i < sizeof($res); $i++) {
+
+
+                                echo
+                                    "
+<div>
+<a href=qstn.php?questionid={$res[$i]['qstn_id']}> "
+                                    . "
+
+                            {$res[$i]['qstn_txt']}
+</a></div>";
+
+
+                            }
+
+
+                        }
+                    }
+                    else
+                    {
+                        $res=$db->read([],[],"");
+                        for($i=0;$i<sizeof($res);$i++){
+                       // while ($res) {
+
+                            echo
+"
+<div>
+<a href=qstn.php?questionid={$res[$i]['qstn_id']}> "
+                            ."
+
+                            {$res[$i]['qstn_txt']}
+</a></div>" ;
+
+
+                        }
+
+
+
+
+                    }
+
+
+
+
+                    ?>
 
                             </div>
-
+                </div>
 
         </div>
              <!--/.ROW-->

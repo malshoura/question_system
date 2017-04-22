@@ -12,7 +12,7 @@ if(isset($_GET['questionid'])) {
 
 $db=new DataBase('qstn');
 $res=$db->read(['qstn_id'],["{$quesid}"],"");
-echo var_dump($res);
+//echo var_dump($res);
 
 
 ?>
@@ -121,7 +121,7 @@ echo var_dump($res);
 
 
               <div class="panel-body">
-                   <form role="form">
+                   <form role="form" action="" method="post">
                                <div class="form-group">
                                    <label> Question</label>
 
@@ -129,13 +129,25 @@ echo var_dump($res);
                                </div>
                         <div class="form-group">
                                    <label>Your Answer</label>
-                                   <input class="form-control" type="text">
+                                   <input class="form-control" type="text" name="answer_txt">
                                    <p class="help-block">Answer here.</p>
                              </div>
                         <aside align="right">
-                               <button type="submit" class="btn btn-info" align="center" onclick="doanswer(<?echo $quesid ?>)">answer</button></aside>
+                               <button type="submit" name="answer" class="btn btn-info" align="center" onclick="doanswer(<?echo $quesid ?>)">answer</button></aside>
 
                            </form>
+                  <?php
+
+                  if(isset($_POST['answer'])) {
+                      $text="'{$_POST['answer_txt']}'";
+
+                      $db->setTable('qstn_cmnt');
+                      $db->insert(['dctr_id', 'qstn_cmnt_txt', 'qstn_id'], [$_SESSION['loginid'], $text, $quesid]);
+                      @header("location:qstn.php?questionid=$quesid");
+
+
+                  }
+                  ?>
                    </div>
                  </div>
                </div>
@@ -160,10 +172,11 @@ echo var_dump($res);
            {
 
            $dr=$db2->read(['dctr_id'],["{$comments[$i]['dctr_id']}"],"");
+           //echo var_dump($dr);
            
            $user=$img->read(['user_id'],["{$dr[0]['user_id']}"],"");
            $avatar=$user[0]['avatar'];
-
+//var_dump($user);
 //echo var_dump($dr);
 
 echo "

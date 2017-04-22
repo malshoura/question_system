@@ -11,7 +11,7 @@
 define("HOST","localhost",false);
 define("DB","doctorpatient",false);
 define("USER","root",false);
-define("PASSWORD","",false);
+define("PASSWORD","12345",false);
 class DataBase
 {
    private $table;
@@ -58,7 +58,7 @@ class DataBase
 
 
                 $sql="INSERT INTO {$this->table} ({$table}) VALUES  ({$values})";
-                echo $sql ."<Br>" ;
+                //echo $sql ."<Br>" ;
                 mysqli_query($this->conn,$sql) ;
 
 
@@ -186,9 +186,9 @@ class DataBase
 
 
         $sql="SELECT * from {$this->table} WHERE ". $where ."1" .$extrasql;
-       // echo "this is selecting sql " . $sql ;
+
 ;
-        $res=@mysqli_query($this->conn,$sql)or die("query error". mysql_error());
+        $res=@mysqli_query($this->conn,$sql)or die("query error");
 
 
 
