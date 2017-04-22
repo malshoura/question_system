@@ -9,6 +9,10 @@ if(isset($_GET['questionid'])) {
    
     $quesid=$_GET['questionid'];
 }
+else
+{
+    @header("location:search_qstn.php");
+}
 
 $db=new DataBase('qstn');
 $res=$db->read(['qstn_id'],["{$quesid}"],"");
@@ -139,10 +143,13 @@ $res=$db->read(['qstn_id'],["{$quesid}"],"");
                   <?php
 
                   if(isset($_POST['answer'])) {
+                      $db->setTable('dctr');
+                      $drid=$db->read(['user_id'],[$_SESSION['loginid']],"")[0]['dctr_id'];
                       $text="'{$_POST['answer_txt']}'";
 
                       $db->setTable('qstn_cmnt');
-                      $db->insert(['dctr_id', 'qstn_cmnt_txt', 'qstn_id'], [$_SESSION['loginid'], $text, $quesid]);
+                     $db->insert(['dctr_id', 'qstn_cmnt_txt', 'qstn_id'], [$drid, $text, $quesid]);
+
                       @header("location:qstn.php?questionid=$quesid");
 
 
@@ -152,14 +159,7 @@ $res=$db->read(['qstn_id'],["{$quesid}"],"");
                  </div>
                </div>
 
-<div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-            Comments
-        </div>
-        <div class="panel-body">
-            <ul class="media-list">
+
 
             <?php
             $db->setTable("qstn_cmnt");
@@ -181,7 +181,7 @@ $res=$db->read(['qstn_id'],["{$quesid}"],"");
 
 echo "
         <li class='media'>
-<a class='pull-left' href=>
+<a class='pull-left' href=profile.php?id={$dr[0]['user_id']}>
 <img class='media-object img-circle' src={$avatar}>
 </a>
 <div class='media-body'>
@@ -192,6 +192,9 @@ echo "
 
 
 
+</p>
+<p>
+{$comments[$i]['qstn_cmnt_date']}
 </p>
 </div>
   

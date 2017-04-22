@@ -15,6 +15,16 @@
     <link href="assets/css/custom.css" rel="stylesheet" />
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+
+    <style>
+
+        .media-object {
+            display: block;
+            width: 35px;
+            height: 35px;
+        }
+    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -132,8 +142,14 @@
                                     </form>
                 </div>
             </div>
-                <div class="row">
-                    <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            QUESTIONS
+                        </div>
+                        <div class="panel-body">
+                            <ul class="media-list">
                     <?php
                     include "DataBase.php";
                     $db=new DataBase('qstn');
@@ -148,17 +164,41 @@
                         } else {
                             echo
                             "<h1 style=color:green>your search results</h1>";
-                            for ($i = 0; $i < sizeof($res); $i++) {
+                            for($i=0;$i<sizeof($res);$i++){
 
+                                $db->setTable("user");
+
+                                $userinfo=$db->read(["user_id"],[$res[$i]['user_id']],"");
+                                //echo  var_dump($userinfo);
+                                $avatar=$userinfo[0]['avatar'];
+                                $username=$userinfo[0]['username'];
 
                                 echo
                                     "
-<div>
-<a href=qstn.php?questionid={$res[$i]['qstn_id']}> "
-                                    . "
 
+        <li class='media'>
+<a class='pull-left' href=profile.php?id={$res[$i]['user_id']}>
+<img class='media-object img-circle' src={$avatar}>
+</a>
+<div class='media-body'>
+<h4 class='media-heading'>{$username}
+</h4>
+<a href=qstn.php?questionid={$res[$i]['qstn_id']}> "
+                                    ."
+
+ <p>   
                             {$res[$i]['qstn_txt']}
-</a></div>";
+</p>
+<p>
+{$res[$i]["qstn_date"]}
+</p>
+</div>
+  
+            </li>
+</a>
+
+
+" ;
 
 
                             }
@@ -170,16 +210,40 @@
                     {
                         $res=$db->read([],[],"");
                         for($i=0;$i<sizeof($res);$i++){
-                       // while ($res) {
+
+                            $db->setTable("user");
+
+                            $userinfo=$db->read(["user_id"],[$res[$i]['user_id']],"");
+                            //echo  var_dump($userinfo);
+                            $avatar=$userinfo[0]['avatar'];
+                            $username=$userinfo[0]['username'];
 
                             echo
 "
-<div>
+
+        <li class='media'>
+<a class='pull-left' href=profile.php?{$res[$i]['user_id']}>
+<img class='media-object img-circle' src={$avatar}>
+</a>
+<div class='media-body'>
+<h4 class='media-heading'>{$username}
+</h4>
 <a href=qstn.php?questionid={$res[$i]['qstn_id']}> "
                             ."
 
+ <p>   
                             {$res[$i]['qstn_txt']}
-</a></div>" ;
+</p>
+<p>
+{$res[$i]["qstn_date"]}
+</p>
+</div>
+  
+            </li>
+</a>
+
+
+" ;
 
 
                         }
