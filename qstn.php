@@ -45,6 +45,8 @@ $res=$db->read(['qstn_id'],["{$quesid}"],"");
     height: 35px;
   }
 </style>
+
+
 </head>
 <body>
     <div id="wrapper">
@@ -178,7 +180,8 @@ $res=$db->read(['qstn_id'],["{$quesid}"],"");
            $avatar=$user[0]['avatar'];
 //var_dump($user);
 //echo var_dump($dr);
-
+if($dr[0]['user_id']==$_SESSION['loginid'])
+    echo "<span class='glyphicon glyphicon-trash' onclick='deletecomment({$comments[$i]['qstn_cmnt_id']}) '></span>";
 echo "
         <li class='media'>
 <a class='pull-left' href=profile.php?id={$dr[0]['user_id']}>
@@ -225,8 +228,37 @@ echo "
 <script src="assets/js/bootstrap.js"></script>
 <!-- METISMENU SCRIPTS -->
 <script src="assets/js/jquery.metisMenu.js"></script>
+
+
+    <script>
+
+        function deletecomment(f) {
+
+            $.ajax({
+                url:"deletecomment.php",
+                type:"GET",
+
+                data:{
+                    commentid:f
+                }
+                ,
+                success:function (respose) {
+
+                    alert("Comment Deleted");
+                    location.reload();
+                }
+
+
+
+            });
+
+        }
+
+
+    </script>
 <!-- CUSTOM SCRIPTS -->
 <script src="assets/js/custom.js"></script>
+
 
 
 </body>
